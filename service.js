@@ -54,7 +54,7 @@ const deleteServices = (req, res) => {
 
 const getServies = (req, res) => {
     services.find({
-        business_users_id: business_users_id,
+        business_users_id: req.body.business_users_id,
     })
         .then(data => {
             res.send(data);
