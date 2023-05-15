@@ -52,7 +52,16 @@ const deleteServices = (req, res) => {
         });
 }
 
+const getServies = (req, res) => {
+    services.find({
+        business_users_id: business_users_id,
+    })
+        .then(data => {
+            res.send(data);
+        });
+}
+
 module.exports = {
     service: service, createServices: createServices,
-    updateServices: updateServices, deleteServices: deleteServices
+    updateServices: updateServices, deleteServices: deleteServices, getServies:getServies
 };
