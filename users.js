@@ -118,8 +118,8 @@ const loginAuth = (req, res) => {
     phone: req.body.phone,
     sms_token: req.body.sms_token
   })
-    .then((users) => {
-      if (users.length == 0) {
+    .then((data) => {
+      if (data.length == 0) {
         res.status(401).json('הקוד לא נכון');
       }
       else {
