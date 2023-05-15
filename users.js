@@ -123,15 +123,38 @@ const loginAuth = (req, res) => {
         res.status(401).json('הקוד לא נכון');
       }
       else {
+        users.find({
+          phone: req.body.phone,
+        })
+          .then((users) => {
+            const token = jwt.sign({ id: users[0]._id }, process.env.TOKEN_KEY, { expiresIn: '24h' });
+            res.header('Access-Control-Allow-Credentials', true);
+            res.cookie("token", token, { sameSite: 'none', secure: true });
+            res.status(200).json('התחברת בהצלחה');
+            //מוחק את הקוד סמס של הלקוח
+            phoneAuth.deleteOne({ sms_token: req.body.sms_token })
+              .then((data) => {
+                console.log(data);
+              });
+          });
+      }
+    });
+}
+
+const loginTest = (req, res) => {
+  //כניסה חופשית לסביבת טסטים
+  users.find({
+    phone: '0509651818',
+  })
+    .then((users) => {
+      if (users.length == 0) {
+        res.status(401).json('לקוח טסטים לא קיים');
+      }
+      else {
         const token = jwt.sign({ id: users[0]._id }, process.env.TOKEN_KEY, { expiresIn: '24h' });
         res.header('Access-Control-Allow-Credentials', true);
         res.cookie("token", token, { sameSite: 'none', secure: true });
         res.status(200).json('התחברת בהצלחה');
-        //מוחק את הקוד סמס של הלקוח
-        phoneAuth.deleteOne({ sms_token: req.body.sms_token })
-          .then((data) => {
-            console.log(data);
-          });
       }
     });
 }
@@ -164,4 +187,7 @@ const updateUser = (req, res) => {
     );
 }
 
-module.exports = { signup: signup, signupAuth: signupAuth, login: login, loginAuth: loginAuth, user: user, updateUser: updateUser };
+module.exports = {
+  signup: signup, signupAuth: signupAuth, login: login, loginAuth: loginAuth,
+  loginTest: loginTest, user: user, updateUser: updateUser
+};

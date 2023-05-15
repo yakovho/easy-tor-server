@@ -5,7 +5,7 @@ const app = express()
 const server = http.createServer(app)
 require('dotenv').config()
 const mongoose = require('mongoose');
-const { signup, signupAuth, login, loginAuth, user, updateUser } = require('./users');
+const { signup, signupAuth, login, loginAuth, loginTest, user, updateUser } = require('./users');
 const { setting, updateSettings } = require('./setting');
 const { event, createEvents, deleteEvents } = require('./event');
 const { service, createServices, updateServices, deleteServices } = require('./service');
@@ -50,6 +50,8 @@ app.post('/signup_auth', signupAuth);
 app.post('/login', login);
 
 app.post('/login_auth', loginAuth);
+
+app.post('/login_test', loginTest);
 
 app.get('/user', checkAuth, user);
 
