@@ -187,7 +187,16 @@ const updateUser = (req, res) => {
     );
 }
 
+const getUser = (req, res) => {
+  users.find({
+    business_token: req.params.token
+  })
+    .then(data => {
+      res.send(data);
+    });
+};
+
 module.exports = {
   signup: signup, signupAuth: signupAuth, login: login, loginAuth: loginAuth,
-  loginTest: loginTest, user: user, updateUser: updateUser
+  loginTest: loginTest, user: user, updateUser: updateUser, getUser: getUser
 };

@@ -16,9 +16,7 @@ const createCustomer = (req, res) => {
     customers.insertMany({
         business_users_id: decoded.id,
         name: req.body.name,
-        phone: req.body.phone,
-        email: req.body.email,
-        password: req.body.password,
+        phone: req.body.phone
     })
         .then(() => {
             res.send("customer insert");
@@ -31,9 +29,7 @@ const updateCustomer = (req, res) => {
         {
             "$set": {
                 name: req.body.name,
-                phone: req.body.phone,
-                email: req.body.email,
-                password: req.body.password
+                phone: req.body.phone
             }
         })
         .then((users) => {

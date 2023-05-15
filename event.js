@@ -61,4 +61,23 @@ const event = (req, res) => {
       });
   }
 
-module.exports = { event: event, createEvents: createEvents, deleteEvents: deleteEvents};
+  const getEvents = (req, res) => {
+    events.aggregate([
+      { "$match": { business_users_id: req.body.business_users_id,  "date": req.body.date } },
+      { $sort: { "start": 1 } },
+      {
+        $addFields: {
+          "serviceId": { "$toObjectId": "$service_id" }, "customerId": { "$toObjectId": "$customer_id" },
+          "userid": { "$toObjectId": "$business_users_id" }
+        }
+      },
+      { $lookup: { from: "business_services", localField: "serviceId", foreignField: "_id", as: "service" } },
+      { $unwind: { path: "$service", preserveNullAndEmptyArrays: true } },
+      { $lookup: { from: "customers", localField: "customerId", foreignField: "_id", as: "service.customer", } },
+    ])
+      .then(data => {
+        res.send(data);
+      });
+  }
+
+module.exports = { event: event, createEvents: createEvents, deleteEvents: deleteEvents, getEvents};

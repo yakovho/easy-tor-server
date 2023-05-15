@@ -5,9 +5,9 @@ const app = express()
 const server = http.createServer(app)
 require('dotenv').config()
 const mongoose = require('mongoose');
-const { signup, signupAuth, login, loginAuth, loginTest, user, updateUser } = require('./users');
-const { setting, updateSettings } = require('./setting');
-const { event, createEvents, deleteEvents } = require('./event');
+const { signup, signupAuth, login, loginAuth, loginTest, user, updateUser, getUser} = require('./users');
+const { setting, updateSettings, getSettings} = require('./setting');
+const { event, createEvents, deleteEvents, getEvents} = require('./event');
 const { service, createServices, updateServices, deleteServices } = require('./service');
 const { customer, createCustomer, updateCustomer, deleteCustomer } = require('./customer');
 const jwt = require('jsonwebtoken');
@@ -82,6 +82,15 @@ app.post('/createCustomer', checkAuth, createCustomer);
 app.post('/updateCustomer', checkAuth, updateCustomer);
 
 app.post('/deleteCustomer', checkAuth, deleteCustomer);
+
+//חלק לקוחות העסק
+app.get('/getUser/:token', getUser);
+
+app.post('/getSettings', getSettings);
+
+app.post('/getEvents', getEvents);
+
+
 
 server.listen(PORT, err => {
   if (err) console.log(err)

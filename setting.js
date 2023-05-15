@@ -26,4 +26,13 @@ const updateSettings = (req, res) => {
         });
 };
 
-module.exports = { setting: setting, updateSettings: updateSettings };
+const getSettings = (req, res) => {
+    settings.find({
+        business_users_id: req.body.business_users_id,
+    })
+        .then(data => {
+            res.send(data);
+        });
+};
+
+module.exports = { setting: setting, updateSettings: updateSettings, getSettings };
