@@ -21,4 +21,15 @@ const checkAuth = (req, res, next) => {
     return result;
   }
 
-module.exports = { checkAuth: checkAuth, createToken: createToken};
+    //יוצר קוד לסמס
+    const numberacters = '0123456789';
+    const createTokenSms = () => {
+      let result = '';
+      const charactersLength = numberacters.length;
+      for (let i = 0; i < 5; i++) {
+        result += numberacters.charAt(Math.floor(Math.random() * charactersLength));
+      }
+      return result;
+    }
+
+module.exports = { checkAuth: checkAuth, createToken: createToken, createTokenSms:createTokenSms};

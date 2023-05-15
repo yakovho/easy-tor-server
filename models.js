@@ -4,8 +4,13 @@ const users = mongoose.Schema({
     name: String,
     business_name: String,
     email: String,
-    password: String,
-    business_token: String 
+    phone: String,
+    business_token: String
+});
+
+const phoneAuth = mongoose.Schema({
+    phone: String,
+    sms_token: String,
 });
 
 const settings = mongoose.Schema({
@@ -33,7 +38,7 @@ const services = mongoose.Schema({
     business_users_id: Object,
     name: String,
     tyme: Number,
-    price:Number
+    price: Number
 });
 
 const customers = mongoose.Schema({
@@ -45,9 +50,13 @@ const customers = mongoose.Schema({
 });
 
 const usersSchema = mongoose.model('business_users', users);
+const phoneAuthSchema = mongoose.model('phone_auths', phoneAuth);
 const settingsSchema = mongoose.model('business_settings', settings);
 const eventsSchema = mongoose.model('business_events', events);
 const servicesSchema = mongoose.model('business_services', services);
 const customersSchema = mongoose.model('customers', customers);
 
-module.exports = { users: usersSchema, settings: settingsSchema, events: eventsSchema, services: servicesSchema, customers:customersSchema};
+module.exports = {
+    users: usersSchema, phoneAuth: phoneAuthSchema, settings: settingsSchema,
+    events: eventsSchema, services: servicesSchema, customers: customersSchema
+};

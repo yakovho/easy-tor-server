@@ -5,7 +5,7 @@ const app = express()
 const server = http.createServer(app)
 require('dotenv').config()
 const mongoose = require('mongoose');
-const { signup, login, user, updateUser } = require('./users');
+const { signup, signupAuth, login, loginAuth, user, updateUser } = require('./users');
 const { setting, updateSettings } = require('./setting');
 const { event, createEvents, deleteEvents } = require('./event');
 const { service, createServices, updateServices, deleteServices } = require('./service');
@@ -45,7 +45,11 @@ mongoose.connect(`mongodb+srv://yakov:${process.env.PASSWORD}@easy-tor.njghjtw.m
 
 app.post('/signup', signup);
 
+app.post('/signup_auth', signupAuth);
+
 app.post('/login', login);
+
+app.post('/login_auth', loginAuth);
 
 app.get('/user', checkAuth, user);
 
