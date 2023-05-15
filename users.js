@@ -177,7 +177,7 @@ const updateUser = (req, res) => {
         name: req.body.name,
         business_name: req.body.business_name,
         email: req.body.email,
-        password: req.body.password
+        phone: req.body.phone
       }
     })
     .then((users) => {
