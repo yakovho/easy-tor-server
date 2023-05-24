@@ -37,7 +37,7 @@ const events = mongoose.Schema({
 const services = mongoose.Schema({
     business_users_id: Object,
     name: String,
-    tyme: Number,
+    time: Number,
     price: Number
 });
 

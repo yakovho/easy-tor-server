@@ -16,7 +16,7 @@ const createServices = (req, res) => {
     services.insertMany({
         business_users_id: decoded.id,
         name: req.body.name,
-        tyme: req.body.tyme,
+        time: req.body.time,
         price: req.body.price
     })
         .then(() => {
@@ -30,7 +30,7 @@ const updateServices = (req, res) => {
         {
             "$set": {
                 name: req.body.name,
-                tyme: req.body.tyme,
+                time: req.body.time,
                 price: req.body.price,
             }
         })
