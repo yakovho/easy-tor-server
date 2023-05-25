@@ -83,10 +83,10 @@ const event = (req, res) => {
   const customerCreateEvent = (req, res) => {
     const decoded = jwt.verify(req.cookies.token, process.env.TOKEN_KEY_CUSTOMERS);
       events.insertMany({
-        business_users_id: business_users_id,
+        business_users_id: req.body.business_users_id,
         customer_id: decoded.id,
         type: 1,
-        service_id: service_id,
+        service_id: req.body.service_id,
         date: req.body.date,
         start: req.body.start,
         end: req.body.end
