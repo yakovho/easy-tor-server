@@ -198,7 +198,7 @@ const getUser = (req, res) => {
 };
 
 const customerSignup = (req, res) => {
-  //בודק אם המייל או הטלפון כבר קיימים במערכת
+  //בודק אם הטלפון כבר קיים במערכת
   customers.find({ phone: req.body.phone, business_users_id: req.body.business_users_id })
     .then((data) => {
       if (data.length === 0) {
@@ -217,7 +217,7 @@ const customerSignup = (req, res) => {
 };
 
 const customerSignupAuth = (req, res) => {
-  //בודק אם המייל או הטלפון כבר קיימים במערכת
+  //בודק אם הטלפון כבר קיים במערכת
   customers.find({ phone: req.body.phone, business_users_id: req.body.business_users_id })
     .then((data) => {
       if (data.length === 0) {
@@ -306,7 +306,7 @@ const customerLoginAuth = (req, res) => {
 
 module.exports = {
   signup: signup, signupAuth: signupAuth, login: login, loginAuth: loginAuth,
-  loginTest: loginTest, user: user, updateUser: updateUser, getUser: getUser, 
-  customerSignup:customerSignup, customerSignupAuth: customerSignupAuth, 
-  customerLogin: customerLogin, customerLoginAuth:customerLoginAuth
+  loginTest: loginTest, user: user, updateUser: updateUser, getUser: getUser,
+  customerSignup: customerSignup, customerSignupAuth: customerSignupAuth,
+  customerLogin: customerLogin, customerLoginAuth: customerLoginAuth
 };

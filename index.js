@@ -8,13 +8,13 @@ const mongoose = require('mongoose');
 const { signup, signupAuth, login, loginAuth, loginTest, user, updateUser, getUser,
   customerSignup, customerSignupAuth, customerLogin, customerLoginAuth } = require('./users');
 const { setting, updateSettings, getSettings } = require('./setting');
-const { event, createEvents, deleteEvents, getEvents } = require('./event');
+const { event, createEvents, deleteEvents, getEvents, customerCreateEvent} = require('./event');
 const { service, createServices, updateServices, deleteServices, getServies } = require('./service');
 const { customer, createCustomer, updateCustomer, deleteCustomer } = require('./customer');
 const jwt = require('jsonwebtoken');
 const cookieParser = require('cookie-parser');
 const cors = require('cors');
-const { checkAuth } = require('./tokens');
+const { checkAuth, checkAuthCustomers} = require('./tokens');
 
 app.use(cors({
   credentials: true,
@@ -100,6 +100,8 @@ app.post('/customerSignupAuth', customerSignupAuth);
 app.post('/customerLogin', customerLogin);
 
 app.post('/customerLoginAuth', customerLoginAuth);
+
+app.post('/customerCreateEvent', checkAuthCustomers, customerCreateEvent);
 
 
 server.listen(PORT, err => {

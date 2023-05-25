@@ -9,6 +9,16 @@ const checkAuth = (req, res, next) => {
       res.status(401).json('הטוקן שגוי');
     }
   }
+
+  const checkAuthCustomers = (req, res, next) => {
+    try {
+      jwt.verify(req.cookies.token, process.env.TOKEN_KEY_CUSTOMERS);
+      next();
+    }
+    catch (error) {
+      res.status(401).json('הטוקן שגוי');
+    }
+  }
   
   //יוצר טוקן אקראי לכל עסק
   const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
@@ -32,4 +42,4 @@ const checkAuth = (req, res, next) => {
       return result;
     }
 
-module.exports = { checkAuth: checkAuth, createToken: createToken, createTokenSms:createTokenSms};
+module.exports = { checkAuth: checkAuth, checkAuthCustomers: checkAuthCustomers, createToken: createToken, createTokenSms:createTokenSms};

@@ -80,4 +80,20 @@ const event = (req, res) => {
       });
   }
 
-module.exports = { event: event, createEvents: createEvents, deleteEvents: deleteEvents, getEvents};
+  const customerCreateEvent = (req, res) => {
+    const decoded = jwt.verify(req.cookies.token, process.env.TOKEN_KEY);
+      events.insertMany({
+        business_users_id: business_users_id,
+        customer_id: decoded.id,
+        type: 1,
+        service_id: service_id,
+        date: req.body.date,
+        start: req.body.start,
+        end: req.body.end
+      })
+        .then(() => {
+          res.send("event insert");
+        });
+    }
+
+module.exports = { event: event, createEvents: createEvents, deleteEvents: deleteEvents, getEvents, customerCreateEvent:customerCreateEvent};
