@@ -36,7 +36,7 @@ const checkAuth = (req, res, next) => {
     const createTokenSms = () => {
       let result = '';
       const charactersLength = numberacters.length;
-      for (let i = 0; i < 5; i++) {
+      for (let i = 0; i < 4; i++) {
         result += numberacters.charAt(Math.floor(Math.random() * charactersLength));
       }
       return result;
