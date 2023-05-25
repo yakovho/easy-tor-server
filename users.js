@@ -1,4 +1,4 @@
-const { users, settings, phoneAuth } = require('./models');
+const { users, settings, phoneAuth, customers } = require('./models');
 const { createToken, createTokenSms } = require('./tokens');
 const jwt = require('jsonwebtoken');
 const axios = require('axios');
@@ -141,8 +141,8 @@ const loginAuth = (req, res) => {
     });
 }
 
+//כניסה חופשית לסביבת טסטים
 const loginTest = (req, res) => {
-  //כניסה חופשית לסביבת טסטים
   users.find({
     phone: '0509651818',
   })
@@ -187,6 +187,7 @@ const updateUser = (req, res) => {
     );
 }
 
+//חלק לקוחות העסק
 const getUser = (req, res) => {
   users.find({
     business_token: req.params.token
@@ -196,7 +197,116 @@ const getUser = (req, res) => {
     });
 };
 
+const customerSignup = (req, res) => {
+  //בודק אם המייל או הטלפון כבר קיימים במערכת
+  customers.find({ phone: req.body.phone, business_users_id: req.body.business_users_id })
+    .then((data) => {
+      if (data.length === 0) {
+        const sms = { code: createTokenSms(), phone: req.body.phone };
+        phoneAuth.insertMany({
+          phone: req.body.phone,
+          sms_token: sms.code,
+        })
+          .then(() => {
+            sendSMS(sms)
+            res.status(200).json('נשלח קוד לאימות');
+          });
+      }
+      else { res.status(401).json('הטלפון כבר קיים במערכת'); }
+    })
+};
+
+const customerSignupAuth = (req, res) => {
+  //בודק אם המייל או הטלפון כבר קיימים במערכת
+  customers.find({ phone: req.body.phone, business_users_id: req.body.business_users_id })
+    .then((data) => {
+      if (data.length === 0) {
+        //בודק את הקוד
+        phoneAuth.find({
+          phone: req.body.phone,
+          sms_token: req.body.sms_token
+        })
+          .then((data) => {
+            if (data.length == 0) {
+              res.status(401).json('הקוד לא נכון');
+            }
+            else {
+              customers.insertMany({
+                business_users_id: req.body.business_users_id,
+                name: req.body.name,
+                phone: req.body.phone,
+              })
+                .then((data) => {
+                  const token = jwt.sign({ id: data[0]._id }, process.env.TOKEN_KEY_CUSTOMERS, { expiresIn: '24h' });
+                  res.header('Access-Control-Allow-Credentials', true);
+                  res.cookie("token", token, { sameSite: 'none', secure: true });
+                  res.status(200).json(`הלקוח ${data[0].name} נוסף בהצלחה`);
+                });
+              //מוחק את הקוד סמס של הלקוח
+              phoneAuth.deleteOne({ sms_token: req.body.sms_token })
+                .then((data) => {
+                  console.log(data);
+                });
+            }
+          });
+      }
+      else { res.status(401).json('הטלפון כבר קיים במערכת'); }
+    })
+};
+
+const customerLogin = (req, res) => {
+  customers.find({ phone: req.body.phone, business_users_id: req.body.business_users_id })
+    .then((users) => {
+      if (users.length == 0) {
+        res.status(401).json('המספר לא מופיע במערכת');
+      }
+      else {
+        const sms = { code: createTokenSms(), phone: req.body.phone };
+        phoneAuth.insertMany({
+          phone: req.body.phone,
+          sms_token: sms.code,
+        })
+          .then(() => {
+            sendSMS(sms),
+              res.status(200).json('נשלח קוד לאימות');
+          });
+      }
+    }
+    );
+}
+
+const customerLoginAuth = (req, res) => {
+  //בודק את הקוד
+  phoneAuth.find({
+    phone: req.body.phone,
+    sms_token: req.body.sms_token
+  })
+    .then((data) => {
+      if (data.length == 0) {
+        res.status(401).json('הקוד לא נכון');
+      }
+      else {
+        customers.find({ phone: req.body.phone, business_users_id: req.body.business_users_id })
+          .then((users) => {
+            const token = jwt.sign({ id: users[0]._id }, process.env.TOKEN_KEY_CUSTOMERS, { expiresIn: '24h' });
+            res.header('Access-Control-Allow-Credentials', true);
+            res.cookie("token", token, { sameSite: 'none', secure: true });
+            res.status(200).json('התחברת בהצלחה');
+            //מוחק את הקוד סמס של הלקוח
+            phoneAuth.deleteOne({ sms_token: req.body.sms_token })
+              .then((data) => {
+                console.log(data);
+              });
+          });
+      }
+    });
+}
+
+
+
 module.exports = {
   signup: signup, signupAuth: signupAuth, login: login, loginAuth: loginAuth,
-  loginTest: loginTest, user: user, updateUser: updateUser, getUser: getUser
+  loginTest: loginTest, user: user, updateUser: updateUser, getUser: getUser, 
+  customerSignup:customerSignup, customerSignupAuth: customerSignupAuth, 
+  customerLogin: customerLogin, customerLoginAuth:customerLoginAuth
 };

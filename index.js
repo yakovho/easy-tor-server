@@ -5,10 +5,11 @@ const app = express()
 const server = http.createServer(app)
 require('dotenv').config()
 const mongoose = require('mongoose');
-const { signup, signupAuth, login, loginAuth, loginTest, user, updateUser, getUser} = require('./users');
-const { setting, updateSettings, getSettings} = require('./setting');
-const { event, createEvents, deleteEvents, getEvents} = require('./event');
-const { service, createServices, updateServices, deleteServices, getServies} = require('./service');
+const { signup, signupAuth, login, loginAuth, loginTest, user, updateUser, getUser,
+  customerSignup, customerSignupAuth, customerLogin, customerLoginAuth } = require('./users');
+const { setting, updateSettings, getSettings } = require('./setting');
+const { event, createEvents, deleteEvents, getEvents } = require('./event');
+const { service, createServices, updateServices, deleteServices, getServies } = require('./service');
 const { customer, createCustomer, updateCustomer, deleteCustomer } = require('./customer');
 const jwt = require('jsonwebtoken');
 const cookieParser = require('cookie-parser');
@@ -92,6 +93,13 @@ app.post('/getServies', getServies);
 
 app.post('/getEvents', getEvents);
 
+app.post('/customerSignup', customerSignup);
+
+app.post('/customerSignupAuth', customerSignupAuth);
+
+app.post('/customerLogin', customerLogin);
+
+app.post('/customerLoginAuth', customerLoginAuth);
 
 
 server.listen(PORT, err => {
