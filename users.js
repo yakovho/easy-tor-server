@@ -63,7 +63,7 @@ const signupAuth = (req, res) => {
                 .then((data) => {
                   const token = jwt.sign({ id: data[0]._id }, process.env.TOKEN_KEY, { expiresIn: '24h' });
                   res.header('Access-Control-Allow-Credentials', true);
-                  res.cookie("token", token, { maxAge: 2 * 60 * 60 * 1000, sameSite: 'none', secure: true });
+                  res.cookie("token", token, { maxAge: 24 * 60 * 60 * 1000, sameSite: 'none', secure: true });
                   res.status(200).json(`הלקוח ${data[0].name} נוסף בהצלחה`);
                   //מקים ללקוח הגדרות עבודה ברירת מחדל
                   settings.insertMany({
@@ -129,7 +129,7 @@ const loginAuth = (req, res) => {
           .then((users) => {
             const token = jwt.sign({ id: users[0]._id }, process.env.TOKEN_KEY, { expiresIn: '24h' });
             res.header('Access-Control-Allow-Credentials', true);
-            res.cookie("token", token, { maxAge: 2 * 60 * 60 * 1000, sameSite: 'none', secure: true });
+            res.cookie("token", token, { maxAge: 24 * 60 * 60 * 1000, sameSite: 'none', secure: true });
             res.status(200).json('התחברת בהצלחה');
             //מוחק את הקוד סמס של הלקוח
             phoneAuth.deleteOne({ sms_token: req.body.sms_token })
@@ -153,7 +153,7 @@ const loginTest = (req, res) => {
       else {
         const token = jwt.sign({ id: users[0]._id }, process.env.TOKEN_KEY, { expiresIn: '24h' });
         res.header('Access-Control-Allow-Credentials', true);
-        res.cookie("token", token, { maxAge: 2 * 60 * 60 * 1000, sameSite: 'none', secure: true });
+        res.cookie("token", token, { maxAge: 24 * 60 * 60 * 1000, sameSite: 'none', secure: true });
         res.status(200).json('התחברת בהצלחה');
       }
     });
@@ -239,7 +239,7 @@ const customerSignupAuth = (req, res) => {
                 .then((data) => {
                   const token = jwt.sign({ id: data[0]._id }, process.env.TOKEN_KEY_CUSTOMERS, { expiresIn: '24h' });
                   res.header('Access-Control-Allow-Credentials', true);
-                  res.cookie("token", token, { maxAge: 2 * 60 * 60 * 1000, sameSite: 'none', secure: true });
+                  res.cookie("token", token, { maxAge: 24 * 60 * 60 * 1000, sameSite: 'none', secure: true });
                   res.status(200).json(`הלקוח ${data[0].name} נוסף בהצלחה`);
                 });
               //מוחק את הקוד סמס של הלקוח
@@ -290,7 +290,7 @@ const customerLoginAuth = (req, res) => {
           .then((users) => {
             const token = jwt.sign({ id: users[0]._id }, process.env.TOKEN_KEY_CUSTOMERS, { expiresIn: '24h' });
             res.header('Access-Control-Allow-Credentials', true);
-            res.cookie("token", token, { maxAge: 2 * 60 * 60 * 1000, sameSite: 'none', secure: true });
+            res.cookie("token", token, { maxAge: 24 * 60 * 60 * 1000, sameSite: 'none', secure: true });
             res.status(200).json('התחברת בהצלחה');
             //מוחק את הקוד סמס של הלקוח
             phoneAuth.deleteOne({ sms_token: req.body.sms_token })
