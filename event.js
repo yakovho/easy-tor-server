@@ -96,4 +96,31 @@ const event = (req, res) => {
         });
     }
 
-module.exports = { event: event, createEvents: createEvents, deleteEvents: deleteEvents, getEvents, customerCreateEvent:customerCreateEvent};
+    const getBookings = (req, res) => {
+      const decoded = jwt.verify(req.cookies.token, process.env.TOKEN_KEY_CUSTOMERS);
+      events.aggregate([
+        { "$match": { customer_id: decoded.id} },
+        { $sort: { "start": 1 } },
+        {
+          $addFields: {
+            "serviceId": { "$toObjectId": "$service_id" },
+            "userid": { "$toObjectId": "$business_users_id" }
+          }
+        },
+        { $lookup: { from: "business_services", localField: "serviceId", foreignField: "_id", as: "service" } },
+        { $unwind: { path: "$service", preserveNullAndEmptyArrays: true } },
+      ])
+          .then(() => {
+            res.send("event insert");
+          });
+      }
+
+    const customerDeleteEvent = (req, res) => {
+      events.deleteOne({ _id: req.body.id })
+          .then(() => {
+            res.send("event insert");
+          });
+      }
+
+module.exports = { event: event, createEvents: createEvents, deleteEvents: deleteEvents, getEvents, 
+  customerCreateEvent:customerCreateEvent, getBookings:getBookings, customerDeleteEvent:customerDeleteEvent};
