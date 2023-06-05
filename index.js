@@ -103,7 +103,7 @@ app.post('/customerLoginAuth', customerLoginAuth);
 
 app.post('/customerCreateEvent', checkAuthCustomers, customerCreateEvent);
 
-app.post('/getBookings', checkAuthCustomers, getBookings);
+app.get('/getBookings', checkAuthCustomers, getBookings);
 
 app.post('/customerDeleteEvent', checkAuthCustomers, customerDeleteEvent);
 
