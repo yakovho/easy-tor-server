@@ -8,7 +8,7 @@ const mongoose = require('mongoose');
 const { signup, signupAuth, login, loginAuth, loginTest, user, updateUser, getUser,
   customerSignup, customerSignupAuth, customerLogin, customerLoginAuth} = require('./users');
 const { setting, updateSettings, getSettings } = require('./setting');
-const { event, createEvents, deleteEvents, getEvents, customerCreateEvent, getBookings, customerDeleteEvent} = require('./event');
+const { event, createEvents, deleteEvents, getEvents, customerCreateEvent, getBookings, customerDeleteEvent, createPause} = require('./event');
 const { service, createServices, updateServices, deleteServices, getServies } = require('./service');
 const { customer, createCustomer, updateCustomer, deleteCustomer } = require('./customer');
 const jwt = require('jsonwebtoken');
@@ -65,6 +65,8 @@ app.post('/updateSettings', checkAuth, updateSettings);
 app.post('/events', checkAuth, event);
 
 app.post('/createEvents', checkAuth, createEvents);
+
+app.post('/createPause', checkAuth, createPause);
 
 app.post('/deleteEvents', checkAuth, deleteEvents);
 
